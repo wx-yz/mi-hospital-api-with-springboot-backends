@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<api context="/healthcare" name="Healthcare" xmlns="http://ws.apache.org/ns/synapse">
+    <resource methods="GET" uri-template="/doctor/{doctorType}">
+        <inSequence>
+            <clone>
+                <target>
+                    <sequence>
+                        <property expression="fn:concat(get-property('env', 'GRAND_OAK_ENDPOINT'), '/', get-property('uri.var.doctorType'))" name="uri.var.host" scope="default" type="STRING"/>
+                        <log level="custom">
+                            <property expression="get-property('uri.var.host')" name="GRAND_OAK_ENDPOINT"/>
+                        </log>
+                        <call>
+                            <endpoint key="GrandOakEP"/>
+                        </call>
+                        <log level="full">
+                            <property name="GRAND_OAK" value="RESPONSE"/>
+                        </log>
+                    </sequence>
+                </target>
+                <target>
+                    <sequence>
+                        <log/>
+                        <payloadFactory media-type="json">
+                            <format>{ "doctorType": "$1" }</format>
+                            <args>
+                                <arg evaluator="xml" expression="$ctx:uri.var.doctorType"/>
+                            </args>
+                        </payloadFactory>
+                        <log level="full">
+                            <property name="PINE_VALLEY" value="REQUEST"/>
+                        </log>
+                        <call>
+                            <endpoint key="PineValleyEP"/>
+                        </call>
+                        <log level="full">
+                            <property name="PINE_VALLEY" value="RESPONSE"/>
+                        </log>
+                    </sequence>
+                </target>
+            </clone>
+            <aggregate>
+                <completeCondition>
+                    <messageCount max="-1" min="-1"/>
+                </completeCondition>
+                <onComplete aggregateElementType="root" expression="json-eval($.doctors[*]['name', 'time', 'hospital'])">
+                    <respond/>
+                </onComplete>
+            </aggregate>
+        </inSequence>
+        <outSequence/>
+        <faultSequence/>
+    </resource>
+</api>
