@@ -5,7 +5,7 @@
             <clone>
                 <target>
                     <sequence>
-                        <property expression="fn:concat(get-property('env', 'GRAND_OAK_ENDPOINT'), '/', get-property('uri.var.doctorType'))" name="uri.var.host" scope="default" type="STRING"/>
+                        <property expression="fn:concat(get-property('env', 'GRAND_OAK_ENDPOINT'), '/grandOaks/doctors/', get-property('uri.var.doctorType'))" name="uri.var.host" scope="default" type="STRING"/>
                         <log level="custom">
                             <property expression="get-property('uri.var.host')" name="GRAND_OAK_ENDPOINT"/>
                         </log>

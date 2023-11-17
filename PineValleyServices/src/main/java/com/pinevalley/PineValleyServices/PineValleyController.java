@@ -42,7 +42,7 @@ public class PineValleyController {
 
     Logger logger = LoggerFactory.getLogger(PineValleyController.class);
     @PostMapping(
-            value = "/pineValley/doctors",
+            value = "/",
             consumes = "application/json",
             produces = "application/json"
     )
