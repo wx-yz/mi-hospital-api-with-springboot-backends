@@ -4,4 +4,4 @@ endpoints:
 - name: PineValleyServices
   port: 8080
   type: REST
-  networkVisibility: Project
+  networkVisibility: Public
